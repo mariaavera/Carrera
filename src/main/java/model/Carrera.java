@@ -13,61 +13,61 @@ import java.util.function.UnaryOperator;
 import java.util.ArrayList;
 
 
-public record Carrera (String nombre, ArrayList<String>estudiantes,ArrayList<String>materias,ArrayList<String>profesores) {
+public record Carrera (String nombre, ArrayList<Estudiante>estudiantes,ArrayList<Materia>materias,ArrayList<Profesor>profesores) {
 
 // CRUD´s
     // CRUD SUBJECT
 
     // Create Subject
-    public void crearMateria(String materia) {
-        Objects.requireNonNull(materia, "Materia requerida");
-        if (materias.contains(materia)) {
-            throw new IllegalStateException("Ya existe materia " + materia);
-        }
-        materias.add(materia);
+    public void crearMateria(Materia m) {
+        Objects.requireNonNull(m, "Materia requerida");
+        boolean dup = materias.stream().anyMatch(x -> x.getCodigo().equals(m.getCodigo()));
+        if (dup) throw new IllegalStateException("Ya existe materia con código " + m.getCodigo());
+        materias.add(m);
     }
 
     // Update subject
-    public void actualizarMateria(String materia, String nuevaMateria) {
-        int idx = materias.indexOf(materia);
-        if (idx == -1) throw new NoSuchElementException("No existe materia " + materia);
-        materias.set(idx, nuevaMateria);
+    public Materia actualizarMateria(String codigo, UnaryOperator<Materia> actualizador) {
+        Materia m = obtenerMateria(codigo)
+                .orElseThrow(() -> new NoSuchElementException("No existe materia " + codigo));
+        actualizador.apply(m);
+        return m;
     }
 
 
     //CRUD TEACHER
 
     // Create Teacher
-    public void crearProfesor(String profesor) {
-        Objects.requireNonNull(profesor, "Profesor requerido");
-        if (profesores.contains(profesor)) {
-            throw new IllegalStateException("Ya existe profesor " + profesor);
-        }
-        profesores.add(profesor);
+    public void crearProfesor(Profesor p) {
+        Objects.requireNonNull(p, "Profesor requerido");
+        boolean dup = profesores.stream().anyMatch(x -> x.getId().equals(p.getId()));
+        if (dup) throw new IllegalStateException("Ya existe profesor con id " + p.getId());
+        profesores.add(p);
     }
 
     // Read Teacher
 
-    public String obtenerProfesor(String profesor) {
+    public Optional<Profesor> obtenerProfesor(String id) {
         return profesores.stream()
-                .filter(p -> p.equals(profesor))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("No existe profesor " + profesor));
+                .filter(p -> p.getId().equals(id))
+                .findFirst();
     }
 
     // Update Teacher
 
-    public void actualizarProfesor(String viejo, String nuevo) {
-        int idx = profesores.indexOf(viejo);
-        if (idx == -1) throw new NoSuchElementException("No existe profesor " + viejo);
-        profesores.set(idx, nuevo);
+    public Profesor actualizarProfesor(String id, UnaryOperator<Profesor> actualizador) {
+        Profesor p = obtenerProfesor(id)
+                .orElseThrow(() -> new NoSuchElementException("No existe profesor " + id));
+        actualizador.apply(p);
+        return p;
     }
+
 
     // Delete Teacher
 
-    public void eliminarProfesor(String profesor) {
-        boolean removed = profesores.remove(profesor);
-        if (!removed) throw new NoSuchElementException("No existe profesor " + profesor);
+    public void eliminarProfesor(String id) {
+        boolean removed = profesores.removeIf(p -> p.getId().equals(id));
+        if (!removed) throw new NoSuchElementException("No existe profesor " + id);
     }
 
     public ArrayList<Materia> buscarMateriaSemestre(String semestre){
