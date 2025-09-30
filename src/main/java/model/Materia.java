@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public abstract class Materia {
     private String codigo;
     private String nombre;
@@ -10,9 +12,9 @@ public abstract class Materia {
     private Carrera ownedByCarrera;
 
     public Materia(String codigo, String nombre, byte numeroHoras, byte cantidadCreditos, String semestre, String profesor, Carrera ownedByCarrera) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.numeroHoras = numeroHoras;
+        this.codigo = Objects.requireNonNull(codigo, "El código es obligatorio" );
+        this.nombre = Objects.requireNonNull(nombre, "El nombre es obligatorio");
+        this.numeroHoras = Objects.requireNonNull(numeroHoras, "El numero de horas es obligatorio");
         this.cantidadCreditos = cantidadCreditos;
         this.semestre = semestre;
         this.profesor = profesor;

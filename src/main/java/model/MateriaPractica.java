@@ -4,8 +4,8 @@ public class MateriaPractica extends Materia {
     private byte horasPractica;
     private byte numeroLabs;
 
-    public MateriaPractica(String codigo, String nombre, byte numeroHoras, byte cantidadCreditos, String semestre, Carrera ownedByCarrera, byte horasPractica, byte numeroLabs) {
-        super(codigo, nombre, numeroHoras, cantidadCreditos, semestre, ownedByCarrera);
+    public MateriaPractica(String codigo, String nombre, byte numeroHoras, byte cantidadCreditos, String semestre,String profesor, Carrera ownedByCarrera, byte horasPractica, byte numeroLabs) {
+        super(codigo, nombre, numeroHoras, cantidadCreditos, semestre,profesor, ownedByCarrera);
         this.horasPractica = horasPractica;
         this.numeroLabs = numeroLabs;
     }

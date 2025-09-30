@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Estudiante {
     private String id;
@@ -12,7 +13,7 @@ public class Estudiante {
     private Carrera ownedByCarrera;
 
     public Estudiante(String id, String nombre, String doc, String porgramaAca, String semestre, ArrayList<Materia> listaMaterias, Carrera ownedByCarrera) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id, "El id es obligatorio");
         this.nombre = nombre;
         this.doc = doc;
         this.porgramaAca = porgramaAca;
